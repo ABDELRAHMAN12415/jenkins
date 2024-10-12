@@ -4,13 +4,13 @@ pipeline {
     stage('Build') {
       steps {
         echo "building"
-        sleep 10
+        sleep 2
       }
     }
     stage('Test') {
       steps {
         echo "testing"
-        sleep 30
+        sleep 2
       }
     }
     stage('Deploy') {
