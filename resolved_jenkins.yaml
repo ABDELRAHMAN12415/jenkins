@@ -21,7 +21,22 @@ jenkins:
                 scope: GLOBAL
                 id: "my-jenkins-ssh-key"
                 username: "ec2-user"
-                privateKey: "${var.ssh_private_key}"
+                privateKey: |
+                  -----BEGIN RSA PRIVATE KEY-----
+                  MIIJKQIBAAKCAgEA2ToA4o8XSpv2e+XO8NwfunLRf/MQZ3muYSot1OSt5e09Q9wD
+                  NIrhWDzrm67W/bfpV+9Wl60lbXzDjFCeX95erXCWJW3REvrYj1tZSeJDajh+Sx7N
+                  sliHH6Ers3ANWxt1uum3KgcHHhUS+SC0pnUoKtIJsgPHUIp72Q/S7EeEF9rw4/D6
+                  WJViZS0YZwqFjWwa7bleerMzteo/ZlPWFSt9ELchdh7gZ2Bu8BSdxfnRgTy6Uu6a
+                  bUtrNLl/VL36RMWC6esyq1axY3Mo7zToMkB++am7loyeMPenIlD/LOUUioNLh/4F
+                  VIW/3llrEloyuFvrb/jEjbqTCQLqTMKoWefNuwp6tTZG+USMj9Gj0sK5qZ/XXjwy
+                  WEvV2Onrno3aM4tNmDCX1IvHuET4YF1di7tplhVYkUWC6T6mPbe3w7OctxWHi3XY
+                  phMFDeCTJMsooYkDDgVkA3doTC6kxE5IntfNhUYmS494sm0nPhNkoNNfIOk9FUdS
+                  JvAB3Y4lC5MwkCFo8lVtzoXOnIcexvs/qtfaMXJhJHF/wVuRfBw3gVepEZUVERy+
+                  akoUByPiKkEe+7H9wIyG2sC9T9R4b5OFOb8xJBAozDp78/Vs2sNUkGzYFDRWclfi
+                  SI3t9Wj9E1Q5ZTzLYWAbMHbJ4PGiw+AAUKzAmL262ZSVUU4wo4vKgke3HMkCAwEA
+                  AQKCAgAzBWWp0RQWaRV2ul5lwj4Ni+RbGhsTQshLeB21sFSL+bH3G1kBYVFWaVCp
+                  ...
+                  -----END RSA PRIVATE KEY----- 
 
   nodeMonitors:
   - "architecture"
