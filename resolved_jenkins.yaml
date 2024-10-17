@@ -1,0 +1,51 @@
+jenkins:
+  numExecutors: 0
+  systemMessage: "Jenkins configured via JCasC"
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
+
+  slaveAgentPort: -1
+
+  credentials:
+    system:
+      domainCredentials:
+        - domain: ""
+          credentials:
+            - sshUserPrivateKey:
+                scope: GLOBAL
+                id: "my-jenkins-ssh-key"
+                username: "ec2-user"
+                privateKey: "${var.ssh_private_key}"
+
+  nodeMonitors:
+  - "architecture"
+  - "clock"
+  - diskSpace:
+      freeSpaceThreshold: "1GiB"
+      freeSpaceWarningThreshold: "1GiB"
+  - "swapSpace"
+  - tmpSpace:
+      freeSpaceThreshold: "1GiB"
+      freeSpaceWarningThreshold: "1GiB"
+  - "responseTime"
+  nodeProperties:
+  - diskSpaceMonitor:
+      freeDiskSpaceThreshold: "1GiB"
+      freeDiskSpaceWarningThreshold: "1GiB"
+      freeTempSpaceThreshold: "200MiB"
+      freeTempSpaceWarningThreshold: "200MiB"
+  
+tool:
+  git:
+    installations:
+    - home: "git"
+      name: "Default"
+  mavenGlobalConfig:
+    globalSettingsProvider: "standard"
+    settingsProvider: "standard"
