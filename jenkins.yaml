@@ -1,4 +1,96 @@
----
 jenkins:
+  numExecutors: 0
   systemMessage: "Jenkins configured via JCasC"
-  numExecutors: 0  # Set executors on master to 0
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
+
+  slaveAgentPort: -1
+
+  credentials:
+    system:
+      domainCredentials:
+        - domain: ""
+          credentials:
+            - sshUserPrivateKey:
+                scope: GLOBAL
+                id: "my-jenkins-ssh-key"
+                username: "ec2-user"
+                privateKey: "${var.ssh_private_key}"
+
+  clouds:
+  - amazonEC2:
+      instanceCapStr: "4"
+      name: "jenkins-slave"
+      region: "${var.region}"
+      templates:
+      - ami: "${var.agent_ami}"
+        amiType:
+          unixData:
+            bootDelay: "50"
+            slaveCommandPrefix: "sudo"
+            sshPort: "22"
+        associatePublicIp: true
+        connectBySSHProcess: false
+        connectionStrategy: PRIVATE_IP
+        deleteRootOnTermination: false
+        idleTerminationMinutes: "30"
+        instanceCapStr: "${var.agents_instance_cap}"
+        javaPath: "/usr/lib/jvm/java-17-amazon-corretto.x86_64/bin/java"
+        labelString: "cloud-agent"
+        maxTotalUses: -1
+        minimumNumberOfInstances: ${var.agents_instance_min}
+        minimumNumberOfSpareInstances: 0
+        mode: EXCLUSIVE
+        nodeProperties:
+        - diskSpaceMonitor:
+            freeDiskSpaceThreshold: "1GiB"
+            freeDiskSpaceWarningThreshold: "1GiB"
+            freeTempSpaceThreshold: "100MiB"
+            freeTempSpaceWarningThreshold: "100MiB"
+        numExecutors: ${var.agent_num_executors}
+        remoteAdmin: "ec2-user"
+        remoteFS: "/home/jenkins"
+        securityGroups: "${var.jenkins_agents_sg}"
+        stopOnTerminate: false
+        subnetId: "${aws_subnet.jenkins_subnet.id}"
+        tenancy: Default
+        type: T3Micro
+        useEphemeralDevices: false
+        useInstanceProfileForCredentials: true
+        userData: |
+          #!/bin/bash
+          sudo yum update -y
+          sudo yum install -y docker.io
+
+  nodeMonitors:
+  - "architecture"
+  - "clock"
+  - diskSpace:
+      freeSpaceThreshold: "1GiB"
+      freeSpaceWarningThreshold: "1GiB"
+  - "swapSpace"
+  - tmpSpace:
+      freeSpaceThreshold: "1GiB"
+      freeSpaceWarningThreshold: "1GiB"
+  - "responseTime"
+  nodeProperties:
+  - diskSpaceMonitor:
+      freeDiskSpaceThreshold: "1GiB"
+      freeDiskSpaceWarningThreshold: "1GiB"
+      freeTempSpaceThreshold: "200MiB"
+      freeTempSpaceWarningThreshold: "200MiB"
+  
+tool:
+  git:
+    installations:
+    - home: "git"
+      name: "Default"
+  mavenGlobalConfig:
+    globalSettingsProvider: "standard"
+    settingsProvider: "standard"
